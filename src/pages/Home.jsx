@@ -8,6 +8,8 @@ class Home extends Component {
     this.state = {
       categoriesProducts: [],
       searchInput: '',
+      categoryID: '',
+      productsSearch: false,
     };
   }
 
@@ -19,15 +21,16 @@ class Home extends Component {
   };
 
   fetchProdutcsSearch = async () => {
-    const { searchInput } = this.state;
-    const response = await getProductsFromCategoryAndQuery(searchInput, searchInput);
+    const { searchInput, categoryID } = this.state;
+    const response = await getProductsFromCategoryAndQuery(categoryID, searchInput);
     this.setState({
       categoriesProducts: response.results,
+      productsSearch: true,
     });
   };
 
   render() {
-    const { categoriesProducts, searchInput } = this.state;
+    const { categoriesProducts, searchInput, productsSearch } = this.state;
     // console.log(categoriesProducts);
     return (
       <div>
@@ -56,13 +59,17 @@ class Home extends Component {
         <p data-testid="home-initial-message">
           Digite algum termo de pesquisa ou escolha uma categoria.
         </p>
-        {categoriesProducts.map((item) => (
-          <div key={ item.id }>
-            <h2>{item.title}</h2>
-            <img src={ item.thumbnail } alt={ item.id } />
-            <h2>{item.price}</h2>
-          </div>
-        ))}
+        {productsSearch && categoriesProducts.length === 0 ? (
+          <p>
+            Nenhum produto foi encontrado
+          </p>)
+          : categoriesProducts.map((item) => (
+            <div key={ item.id } data-testid="product">
+              <h2>{item.title}</h2>
+              <img src={ item.thumbnail } alt={ item.id } />
+              <h2>{item.price}</h2>
+            </div>
+          ))}
       </div>
     );
   }
