@@ -17,6 +17,7 @@ class App extends React.Component {
     categoryID: '',
     productsSearch: false,
     cartSaved: [],
+    sum: 1,
   };
 
   componentDidMount() {
@@ -68,16 +69,16 @@ class App extends React.Component {
     localStorage.setItem('cart', JSON.stringify(cartSaved));
   };
 
-  addCartItem = async (param) => {
-    if (param.target.parentNode.id) {
-      const newItem = param.target.parentNode.id;
+  addCartItem = async ({ target }) => {
+    if (target.parentNode.id) {
+      const newItem = target.parentNode.id;
       const { categoriesProducts } = this.state;
       const item = categoriesProducts.find((product) => product.id === newItem);
       this.setState((state) => ({
         cartSaved: [...state.cartSaved, item],
       }), async () => this.saveLocalStorage());
     } else {
-      const newItem = param.target.parentNode.className;
+      const newItem = target.parentNode.className;
       const { categoriesProducts } = this.state;
       const item = categoriesProducts.find((product) => product.id === newItem);
       this.setState((state) => ({
@@ -86,9 +87,32 @@ class App extends React.Component {
     }
   };
 
+  deleteLocalStorageItem = ({ target }) => {
+    const theId = target.parentNode.firstChild.alt;
+    const { cartSaved } = this.state;
+    const newCart = cartSaved.filter(({ id }) => id !== theId);
+    localStorage.setItem('cart', JSON.stringify(newCart));
+    this.setState({ cartSaved: newCart });
+  };
+
+  handleSum = () => {
+    this.setState((prevState) => ({
+      sum: prevState.sum + 1,
+    }));
+  };
+
+  handleDecrease = () => {
+    const { sum } = this.state;
+    if (sum > 1) {
+      this.setState((prevState) => ({
+        sum: prevState.sum - 1,
+      }));
+    }
+  };
+
   render() {
     const {
-      categories, categoriesProducts, searchInput, productsSearch, cartSaved,
+      categories, categoriesProducts, searchInput, productsSearch, cartSaved, sum,
     } = this.state;
 
     return (
@@ -121,7 +145,13 @@ class App extends React.Component {
             exact
             path="/cart"
             render={ () => (
-              <Cart cartSaved={ cartSaved } />
+              <Cart
+                cartSaved={ cartSaved }
+                deleteLocalStorageItem={ this.deleteLocalStorageItem }
+                handleSum={ this.handleSum }
+                handleDecrease={ this.handleDecrease }
+                sum={ sum }
+              />
             ) }
           />
         </Switch>
