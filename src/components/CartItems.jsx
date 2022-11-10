@@ -10,8 +10,8 @@ class CartItems extends Component {
     return (
       <div>
         <div>
-          {cartSaved.map(({ id, title, thumbnail }) => (
-            <div key={ Math.random() }>
+          {cartSaved.map(({ id, title, thumbnail }, index) => (
+            <div key={ Math.random() } id={ index }>
               <img alt={ id } src={ thumbnail } />
               <p data-testid="shopping-cart-product-name">{ title }</p>
 
@@ -26,7 +26,7 @@ class CartItems extends Component {
               <p
                 data-testid="shopping-cart-product-quantity"
               >
-                { `${sum}` }
+                { `${sum[index][id].quantity}` }
 
               </p>
               <button
@@ -62,7 +62,9 @@ CartItems.propTypes = {
   deleteLocalStorageItem: PropTypes.func.isRequired,
   handleDecrease: PropTypes.func.isRequired,
   handleSum: PropTypes.func.isRequired,
-  sum: PropTypes.number.isRequired,
+  sum: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+  })).isRequired,
 };
 
 export default CartItems;

@@ -33,7 +33,9 @@ Cart.propTypes = {
   deleteLocalStorageItem: PropTypes.func.isRequired,
   handleDecrease: PropTypes.func.isRequired,
   handleSum: PropTypes.func.isRequired,
-  sum: PropTypes.number.isRequired,
+  sum: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+  })).isRequired,
 };
 
 export default Cart;
