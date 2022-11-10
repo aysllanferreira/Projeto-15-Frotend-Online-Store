@@ -20,6 +20,7 @@ class Cart extends Component {
           handleSum={ handleSum }
           sum={ sum }
         />}
+
       </div>
     );
   }

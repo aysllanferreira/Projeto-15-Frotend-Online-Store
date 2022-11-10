@@ -9,43 +9,47 @@ class CartItems extends Component {
 
     return (
       <div>
-        {cartSaved.map(({ id, title, thumbnail }) => (
-          <div key={ Math.random() }>
-            <img alt={ id } src={ thumbnail } />
-            <p data-testid="shopping-cart-product-name">{ title }</p>
+        <div>
+          {cartSaved.map(({ id, title, thumbnail }) => (
+            <div key={ Math.random() }>
+              <img alt={ id } src={ thumbnail } />
+              <p data-testid="shopping-cart-product-name">{ title }</p>
 
-            <button
-              type="button"
-              data-testid="product-increase-quantity"
-              onClick={ handleSum }
-            >
-              +
+              <button
+                type="button"
+                data-testid="product-increase-quantity"
+                onClick={ handleSum }
+              >
+                +
 
-            </button>
-            <p
-              data-testid="shopping-cart-product-quantity"
-            >
-              { `${sum}` }
+              </button>
+              <p
+                data-testid="shopping-cart-product-quantity"
+              >
+                { `${sum}` }
 
-            </p>
-            <button
-              type="button"
-              data-testid="product-decrease-quantity"
-              onClick={ handleDecrease }
-            >
-              -
+              </p>
+              <button
+                type="button"
+                data-testid="product-decrease-quantity"
+                onClick={ handleDecrease }
+              >
+                -
 
-            </button>
-            <button
-              type="button"
-              data-testid="remove-product"
-              onClick={ deleteLocalStorageItem }
-            >
-              Deletar
+              </button>
+              <button
+                type="button"
+                data-testid="remove-product"
+                onClick={ deleteLocalStorageItem }
+              >
+                Deletar
 
-            </button>
-          </div>
-        ))}
+              </button>
+
+            </div>
+          ))}
+        </div>
+
       </div>
     );
   }
