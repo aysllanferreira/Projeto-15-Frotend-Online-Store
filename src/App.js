@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import Cart from './pages/Cart';
 import Category from './components/Category';
 import PageItem from './pages/PageItem';
+import Checkout from './pages/Checkout';
 
 class App extends React.Component {
   state = {
@@ -16,16 +17,17 @@ class App extends React.Component {
     searchInput: '',
     categoryID: '',
     productsSearch: false,
-    cartSaved: [],
+    salvador: [],
     sum: [],
   };
 
   componentDidMount() {
     this.fetchCategories();
     if (localStorage.getItem('cart')) {
-      this.setState({ cartSaved: JSON.parse(localStorage.getItem('cart')) });
+      this.setState({ salvador: JSON.parse(localStorage.getItem('cart')) });
     }
     this.getSumLocalStorage();
+    this.getSalvadorLocalStorage();
   }
 
   handleChange = ({ target }) => {
@@ -66,8 +68,8 @@ class App extends React.Component {
   };
 
   saveLocalStorage = async () => {
-    const { cartSaved } = this.state;
-    localStorage.setItem('cart', JSON.stringify(cartSaved));
+    const { salvador } = this.state;
+    localStorage.setItem('cart', JSON.stringify(salvador));
   };
 
   addCartItem = async ({ target }) => {
@@ -76,30 +78,36 @@ class App extends React.Component {
       const { categoriesProducts } = this.state;
       const item = categoriesProducts.find((product) => product.id === newItem);
       this.setState((state) => ({
-        cartSaved: [...state.cartSaved, item],
+        salvador: [...state.salvador, item],
         sum: [...state.sum, { [item.id]: {
           quantity: 1,
         } }],
-      }), async () => this.saveLocalStorage());
+      }), async () => {
+        await this.saveLocalStorage();
+        this.salvadorLocalStorage();
+      });
     } else {
       const newItem = target.parentNode.className;
       const { categoriesProducts } = this.state;
       const item = categoriesProducts.find((product) => product.id === newItem);
       this.setState((state) => ({
-        cartSaved: [...state.cartSaved, item],
+        salvador: [...state.salvador, item],
         sum: [...state.sum, { [newItem]: {
           quantity: 1,
         } }],
-      }), async () => this.saveLocalStorage());
+      }), async () => {
+        await this.saveLocalStorage();
+        this.salvadorLocalStorage();
+      });
     }
   };
 
   deleteLocalStorageItem = ({ target }) => {
     const theId = target.parentNode.firstChild.alt;
-    const { cartSaved } = this.state;
-    const newCart = cartSaved.filter(({ id }) => id !== theId);
+    const { salvador } = this.state;
+    const newCart = salvador.filter(({ id }) => id !== theId);
     localStorage.setItem('cart', JSON.stringify(newCart));
-    this.setState({ cartSaved: newCart });
+    this.setState({ salvador: newCart });
   };
 
   getSumLocalStorage = () => {
@@ -114,20 +122,20 @@ class App extends React.Component {
   };
 
   handleSum = ({ target }) => {
-    const { cartSaved, sum } = this.state;
+    const { salvador, sum } = this.state;
     const theId = target.parentNode.firstChild.alt;
-    const item = cartSaved.find((product) => product.id === theId);
-    const index = cartSaved.indexOf(item);
+    const item = salvador.find((product) => product.id === theId);
+    const index = salvador.indexOf(item);
     const newSum = sum;
     newSum[index][theId].quantity += 1;
     this.setState({ sum: newSum }, () => this.saveSumLocalStorage());
   };
 
   handleDecrease = ({ target }) => {
-    const { cartSaved, sum } = this.state;
+    const { salvador, sum } = this.state;
     const theId = target.parentNode.firstChild.alt;
-    const item = cartSaved.find((product) => product.id === theId);
-    const index = cartSaved.indexOf(item);
+    const item = salvador.find((product) => product.id === theId);
+    const index = salvador.indexOf(item);
     const newSum = sum;
     newSum[index][theId].quantity -= 1;
     if (newSum[index][theId].quantity > 0) {
@@ -135,9 +143,21 @@ class App extends React.Component {
     }
   };
 
+  salvadorLocalStorage = () => {
+    const { salvador } = this.state;
+    localStorage.setItem('cartSalvador', JSON.stringify(salvador));
+  };
+
+  getSalvadorLocalStorage = () => {
+    if (localStorage.getItem('cartSalvador')) {
+      this.setState({ salvador: JSON.parse(localStorage.getItem('cartSalvador')) });
+    }
+  };
+
   render() {
     const {
-      categories, categoriesProducts, searchInput, productsSearch, cartSaved, sum,
+      categories, categoriesProducts, searchInput, productsSearch,
+      sum, salvador,
     } = this.state;
 
     return (
@@ -171,7 +191,7 @@ class App extends React.Component {
             path="/cart"
             render={ () => (
               <Cart
-                cartSaved={ cartSaved }
+                cartSaved={ salvador }
                 deleteLocalStorageItem={ this.deleteLocalStorageItem }
                 handleSum={ this.handleSum }
                 handleDecrease={ this.handleDecrease }
@@ -179,6 +199,7 @@ class App extends React.Component {
               />
             ) }
           />
+          <Route exact path="/checkout" component={ Checkout } />
         </Switch>
         <Category
           handleChange={ this.handleClick }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import CartItems from '../components/CartItems';
 
 class Cart extends Component {
@@ -20,6 +21,8 @@ class Cart extends Component {
           handleSum={ handleSum }
           sum={ sum }
         />}
+
+        <Link data-testid="checkout-products" to="/checkout">Comprar</Link>
 
       </div>
     );
