@@ -1,10 +1,12 @@
 import React from 'react';
 import './App.css';
 import { Switch, Route } from 'react-router-dom';
-import { getProductsFromCategoryAndQuery, getCategories } from './services/api';
+import { getProductsFromCategoryAndQuery, getCategories,
+  getProductById } from './services/api';
 import Home from './pages/Home';
 import Cart from './pages/Cart';
 import Category from './components/Category';
+import PageItem from './pages/PageItem';
 
 class App extends React.Component {
   state = {
@@ -44,7 +46,7 @@ class App extends React.Component {
   };
 
   fetchCategorySearch = async (categoryID) => {
-    const response = await getProductsFromCategoryAndQuery(categoryID);
+    const response = await getProductById(categoryID);
     this.setState({
       categoriesProducts: response.results,
       productsSearch: true,
@@ -72,7 +74,17 @@ class App extends React.Component {
               productsSearch={ productsSearch }
               fetchProdutcsSearch={ this.fetchProdutcsSearch }
               handleChange={ this.handleChange }
-            />) }
+            />
+            ) }
+          />
+          <Route
+            exact
+            path="/page-item/:id"
+            render={ (props) => (
+              <PageItem
+                { ...props }
+              />
+            ) }
           />
           <Route exact path="/cart" component={ Cart } />
         </Switch>
