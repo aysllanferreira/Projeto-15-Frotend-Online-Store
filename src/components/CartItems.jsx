@@ -7,6 +7,8 @@ class CartItems extends Component {
       cartSaved, deleteLocalStorageItem, handleDecrease, handleSum, sum,
     } = this.props;
 
+    console.log(sum);
+
     return (
       <div>
         <div>
@@ -26,7 +28,7 @@ class CartItems extends Component {
               <p
                 data-testid="shopping-cart-product-quantity"
               >
-                { `${sum[index][id].quantity}` }
+                { sum.length > 0 && `${sum[index][id].quantity}` }
 
               </p>
               <button
