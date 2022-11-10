@@ -16,10 +16,14 @@ class App extends React.Component {
     searchInput: '',
     categoryID: '',
     productsSearch: false,
+    cartSaved: [],
   };
 
   componentDidMount() {
     this.fetchCategories();
+    if (localStorage.getItem('cart')) {
+      this.setState({ cartSaved: JSON.parse(localStorage.getItem('cart')) });
+    }
   }
 
   handleChange = ({ target }) => {
@@ -59,10 +63,25 @@ class App extends React.Component {
     await this.fetchCategorySearch(id);
   };
 
+  saveLocalStorage = async () => {
+    const { cartSaved } = this.state;
+    localStorage.setItem('cart', JSON.stringify(cartSaved));
+  };
+
+  addCartItem = async ({ target }) => {
+    const newItem = target.parentNode.id;
+    const { categoriesProducts } = this.state;
+    const item = categoriesProducts.find((product) => product.id === newItem);
+    this.setState((state) => ({
+      cartSaved: [...state.cartSaved, item],
+    }), async () => this.saveLocalStorage());
+  };
+
   render() {
     const {
-      categories, categoriesProducts, searchInput, productsSearch,
+      categories, categoriesProducts, searchInput, productsSearch, cartSaved,
     } = this.state;
+
     return (
       <div className="App">
         <Switch>
@@ -75,6 +94,7 @@ class App extends React.Component {
               productsSearch={ productsSearch }
               fetchProdutcsSearch={ this.fetchProdutcsSearch }
               handleChange={ this.handleChange }
+              addCartItem={ this.addCartItem }
             />
             ) }
           />
@@ -87,7 +107,13 @@ class App extends React.Component {
               />
             ) }
           />
-          <Route exact path="/cart" component={ Cart } />
+          <Route
+            exact
+            path="/cart"
+            render={ () => (
+              <Cart cartSaved={ cartSaved } />
+            ) }
+          />
         </Switch>
         <Category
           handleChange={ this.handleClick }

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 class Home extends Component {
   render() {
     const { categoriesProducts, searchInput, productsSearch,
-      fetchProdutcsSearch, handleChange } = this.props;
+      fetchProdutcsSearch, handleChange, addCartItem } = this.props;
     return (
       <div>
         <label htmlFor="search">
@@ -37,18 +37,26 @@ class Home extends Component {
           <p>
             Nenhum produto foi encontrado
           </p>)
-          : categoriesProducts.map((item) => (
-            <div key={ item.id } data-testid="product">
-              <h2>{item.title}</h2>
-              <img src={ item.thumbnail } alt={ item.id } />
-              <h2>{item.price}</h2>
+          : categoriesProducts.map(({ id, title, thumbnail, price }) => (
+            <div key={ id } data-testid="product" id={ id }>
+              <h2>{title}</h2>
+              <img src={ thumbnail } alt={ id } />
+              <h2>{price}</h2>
               <Link
                 data-testid="product-detail-link"
-                to={ `/page-item/${item.id}` }
+                to={ `/page-item/${id}` }
               >
                 Detalhes
 
               </Link>
+              <button
+                type="button"
+                data-testid="product-add-to-cart"
+                onClick={ addCartItem }
+              >
+                Adicionar ao Carrinho
+
+              </button>
             </div>
           ))}
       </div>
@@ -67,6 +75,7 @@ Home.propTypes = {
   productsSearch: PropTypes.bool.isRequired,
   fetchProdutcsSearch: PropTypes.func.isRequired,
   handleChange: PropTypes.func.isRequired,
+  addCartItem: PropTypes.func.isRequired,
 };
 
 export default Home;
