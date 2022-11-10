@@ -1,25 +1,9 @@
 import React, { Component } from 'react';
-import { getCategories } from '../services/api';
+import PropTypes from 'prop-types';
 
 class Category extends Component {
-  state = {
-    categories: [],
-  };
-
-  componentDidMount() {
-    this.fetchCategories();
-  }
-
-  fetchCategories = async () => {
-    const fetch = await getCategories();
-    this.setState({
-      categories: fetch,
-    });
-    return fetch;
-  };
-
   render() {
-    const { categories } = this.state;
+    const { handleChange, categories } = this.props;
     return (
       <div>
         {categories.map(({ id, name }) => (
@@ -27,6 +11,8 @@ class Category extends Component {
             data-testid="category"
             type="button"
             key={ id }
+            id={ id }
+            onClick={ handleChange }
           >
             {name}
 
@@ -36,5 +22,13 @@ class Category extends Component {
     );
   }
 }
+
+Category.propTypes = {
+  handleChange: PropTypes.func.isRequired,
+  categories: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  })).isRequired,
+};
 
 export default Category;

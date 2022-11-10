@@ -1,37 +1,11 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { getProductsFromCategoryAndQuery } from '../services/api';
+import PropTypes from 'prop-types';
 
 class Home extends Component {
-  constructor() {
-    super();
-    this.state = {
-      categoriesProducts: [],
-      searchInput: '',
-      categoryID: '',
-      productsSearch: false,
-    };
-  }
-
-  handleChange = ({ target }) => {
-    const { name, value } = target;
-    this.setState({
-      [name]: value,
-    });
-  };
-
-  fetchProdutcsSearch = async () => {
-    const { searchInput, categoryID } = this.state;
-    const response = await getProductsFromCategoryAndQuery(categoryID, searchInput);
-    this.setState({
-      categoriesProducts: response.results,
-      productsSearch: true,
-    });
-  };
-
   render() {
-    const { categoriesProducts, searchInput, productsSearch } = this.state;
-    // console.log(categoriesProducts);
+    const { categoriesProducts, searchInput, productsSearch,
+      fetchProdutcsSearch, handleChange } = this.props;
     return (
       <div>
         <label htmlFor="search">
@@ -42,13 +16,13 @@ class Home extends Component {
             data-testid="query-input"
             value={ searchInput }
             name="searchInput"
-            onChange={ this.handleChange }
+            onChange={ handleChange }
           />
         </label>
         <button
           type="button"
           data-testid="query-button"
-          onClick={ this.fetchProdutcsSearch }
+          onClick={ fetchProdutcsSearch }
         >
           Pesquisar
 
@@ -74,5 +48,18 @@ class Home extends Component {
     );
   }
 }
+
+Home.propTypes = {
+  categoriesProducts: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    thumbnail: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+  })).isRequired,
+  searchInput: PropTypes.string.isRequired,
+  productsSearch: PropTypes.bool.isRequired,
+  fetchProdutcsSearch: PropTypes.func.isRequired,
+  handleChange: PropTypes.func.isRequired,
+};
 
 export default Home;
