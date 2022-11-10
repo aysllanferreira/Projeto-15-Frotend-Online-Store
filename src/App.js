@@ -1,8 +1,9 @@
 import React from 'react';
 import './App.css';
 import { Switch, Route } from 'react-router-dom';
-import { getProductsFromCategoryAndQuery, getCategories,
-  getProductById } from './services/api';
+import {
+  getProductsFromCategoryAndQuery, getCategories, getProductByCategory,
+} from './services/api';
 import Home from './pages/Home';
 import Cart from './pages/Cart';
 import Category from './components/Category';
@@ -46,7 +47,7 @@ class App extends React.Component {
   };
 
   fetchCategorySearch = async (categoryID) => {
-    const response = await getProductById(categoryID);
+    const response = await getProductByCategory(categoryID);
     this.setState({
       categoriesProducts: response.results,
       productsSearch: true,

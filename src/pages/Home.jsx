@@ -42,6 +42,13 @@ class Home extends Component {
               <h2>{item.title}</h2>
               <img src={ item.thumbnail } alt={ item.id } />
               <h2>{item.price}</h2>
+              <Link
+                data-testid="product-detail-link"
+                to={ `/page-item/${item.id}` }
+              >
+                Detalhes
+
+              </Link>
             </div>
           ))}
       </div>
