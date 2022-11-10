@@ -173,6 +173,7 @@ class App extends React.Component {
               fetchProdutcsSearch={ this.fetchProdutcsSearch }
               handleChange={ this.handleChange }
               addCartItem={ this.addCartItem }
+              salvador={ salvador }
             />
             ) }
           />
@@ -183,6 +184,7 @@ class App extends React.Component {
               <PageItem
                 { ...props }
                 addCartItem={ this.addCartItem }
+                salvador={ salvador }
               />
             ) }
           />
