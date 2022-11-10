@@ -17,15 +17,16 @@ class PageItem extends Component {
 
   render() {
     const { products } = this.state;
+    const { title, price, thumbnail, id } = products;
     return (
       <div>
-        <h2 data-testid="product-detail-name">{products.title}</h2>
+        <h2 data-testid="product-detail-name">{title}</h2>
         <img
           data-testid="product-detail-image"
-          src={ products.thumbnail }
-          alt={ products.id }
+          src={ thumbnail }
+          alt={ id }
         />
-        <h2 data-testid="product-detail-price">{products.price}</h2>
+        <h2 data-testid="product-detail-price">{price}</h2>
 
         <Link data-testid="shopping-cart-button" to="/cart">Carrinho</Link>
       </div>
