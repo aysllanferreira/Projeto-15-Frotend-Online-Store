@@ -68,13 +68,22 @@ class App extends React.Component {
     localStorage.setItem('cart', JSON.stringify(cartSaved));
   };
 
-  addCartItem = async ({ target }) => {
-    const newItem = target.parentNode.id;
-    const { categoriesProducts } = this.state;
-    const item = categoriesProducts.find((product) => product.id === newItem);
-    this.setState((state) => ({
-      cartSaved: [...state.cartSaved, item],
-    }), async () => this.saveLocalStorage());
+  addCartItem = async (param) => {
+    if (param.target.parentNode.id) {
+      const newItem = param.target.parentNode.id;
+      const { categoriesProducts } = this.state;
+      const item = categoriesProducts.find((product) => product.id === newItem);
+      this.setState((state) => ({
+        cartSaved: [...state.cartSaved, item],
+      }), async () => this.saveLocalStorage());
+    } else {
+      const newItem = param.target.parentNode.className;
+      const { categoriesProducts } = this.state;
+      const item = categoriesProducts.find((product) => product.id === newItem);
+      this.setState((state) => ({
+        cartSaved: [...state.cartSaved, item],
+      }), async () => this.saveLocalStorage());
+    }
   };
 
   render() {
@@ -104,6 +113,7 @@ class App extends React.Component {
             render={ (props) => (
               <PageItem
                 { ...props }
+                addCartItem={ this.addCartItem }
               />
             ) }
           />
