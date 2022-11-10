@@ -5,7 +5,8 @@ import PropTypes from 'prop-types';
 class Home extends Component {
   render() {
     const { categoriesProducts, searchInput, productsSearch,
-      fetchProdutcsSearch, handleChange, addCartItem } = this.props;
+      fetchProdutcsSearch, handleChange, addCartItem, salvador } = this.props;
+    console.log(salvador);
     return (
       <div>
         <label htmlFor="search">
@@ -30,6 +31,8 @@ class Home extends Component {
         <Link to="/cart" data-testid="shopping-cart-button">
           Carrinho de compras
         </Link>
+        {salvador.length === 0 ? (<span data-testid="shopping-cart-size">{0}</span>)
+          : (<span data-testid="shopping-cart-size">{salvador.length}</span>)}
         <p data-testid="home-initial-message">
           Digite algum termo de pesquisa ou escolha uma categoria.
         </p>
@@ -76,6 +79,11 @@ Home.propTypes = {
   fetchProdutcsSearch: PropTypes.func.isRequired,
   handleChange: PropTypes.func.isRequired,
   addCartItem: PropTypes.func.isRequired,
+  salvador: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
 };
 
 export default Home;

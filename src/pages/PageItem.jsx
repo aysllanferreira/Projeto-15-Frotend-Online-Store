@@ -66,7 +66,7 @@ class PageItem extends Component {
   render() {
     const { products, permission, email, evaluation, result } = this.state;
     const { title, price, thumbnail, id } = products;
-    const { addCartItem } = this.props;
+    const { addCartItem, salvador } = this.props;
 
     return (
       <div className={ id }>
@@ -79,6 +79,8 @@ class PageItem extends Component {
         <h2 data-testid="product-detail-price">{price}</h2>
 
         <Link data-testid="shopping-cart-button" to="/cart">Carrinho</Link>
+        {salvador.length === 0 ? (<span data-testid="shopping-cart-size">{0}</span>)
+          : (<span data-testid="shopping-cart-size">{salvador.length}</span>)}
         <button
           type="button"
           data-testid="product-detail-add-to-cart"
@@ -108,6 +110,11 @@ PageItem.propTypes = {
     }).isRequired,
   }).isRequired,
   addCartItem: PropTypes.func.isRequired,
+  salvador: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
 };
 
 export default PageItem;
