@@ -17,7 +17,7 @@ class App extends React.Component {
     categoryID: '',
     productsSearch: false,
     cartSaved: [],
-    sum: 1,
+    sum: [],
   };
 
   componentDidMount() {
@@ -25,6 +25,7 @@ class App extends React.Component {
     if (localStorage.getItem('cart')) {
       this.setState({ cartSaved: JSON.parse(localStorage.getItem('cart')) });
     }
+    this.getSumLocalStorage();
   }
 
   handleChange = ({ target }) => {
@@ -76,6 +77,9 @@ class App extends React.Component {
       const item = categoriesProducts.find((product) => product.id === newItem);
       this.setState((state) => ({
         cartSaved: [...state.cartSaved, item],
+        sum: [...state.sum, { [item.id]: {
+          quantity: 1,
+        } }],
       }), async () => this.saveLocalStorage());
     } else {
       const newItem = target.parentNode.className;
@@ -83,6 +87,9 @@ class App extends React.Component {
       const item = categoriesProducts.find((product) => product.id === newItem);
       this.setState((state) => ({
         cartSaved: [...state.cartSaved, item],
+        sum: [...state.sum, { [newItem]: {
+          quantity: 1,
+        } }],
       }), async () => this.saveLocalStorage());
     }
   };
@@ -95,18 +102,36 @@ class App extends React.Component {
     this.setState({ cartSaved: newCart });
   };
 
-  handleSum = () => {
-    this.setState((prevState) => ({
-      sum: prevState.sum + 1,
-    }));
+  getSumLocalStorage = () => {
+    if (localStorage.getItem('sum')) {
+      this.setState({ sum: JSON.parse(localStorage.getItem('sum')) });
+    }
   };
 
-  handleDecrease = () => {
+  saveSumLocalStorage = () => {
     const { sum } = this.state;
-    if (sum > 1) {
-      this.setState((prevState) => ({
-        sum: prevState.sum - 1,
-      }));
+    localStorage.setItem('sum', JSON.stringify(sum));
+  };
+
+  handleSum = ({ target }) => {
+    const { cartSaved, sum } = this.state;
+    const theId = target.parentNode.firstChild.alt;
+    const item = cartSaved.find((product) => product.id === theId);
+    const index = cartSaved.indexOf(item);
+    const newSum = sum;
+    newSum[index][theId].quantity += 1;
+    this.setState({ sum: newSum }, () => this.saveSumLocalStorage());
+  };
+
+  handleDecrease = ({ target }) => {
+    const { cartSaved, sum } = this.state;
+    const theId = target.parentNode.firstChild.alt;
+    const item = cartSaved.find((product) => product.id === theId);
+    const index = cartSaved.indexOf(item);
+    const newSum = sum;
+    newSum[index][theId].quantity -= 1;
+    if (newSum[index][theId].quantity > 0) {
+      this.setState({ sum: newSum }, () => this.saveSumLocalStorage());
     }
   };
 
