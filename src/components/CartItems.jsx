@@ -7,8 +7,6 @@ class CartItems extends Component {
       cartSaved, deleteLocalStorageItem, handleDecrease, handleSum, sum,
     } = this.props;
 
-    console.log(sum);
-
     return (
       <div>
         <div>
