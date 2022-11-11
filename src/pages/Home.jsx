@@ -6,7 +6,6 @@ class Home extends Component {
   render() {
     const { categoriesProducts, searchInput, productsSearch,
       fetchProdutcsSearch, handleChange, addCartItem, salvador } = this.props;
-    console.log(salvador);
     return (
       <div>
         <label htmlFor="search">
@@ -40,7 +39,7 @@ class Home extends Component {
           <p>
             Nenhum produto foi encontrado
           </p>)
-          : categoriesProducts.map(({ id, title, thumbnail, price }) => (
+          : categoriesProducts.map(({ id, title, thumbnail, price, shipping }) => (
             <div key={ id } data-testid="product" id={ id }>
               <h2>{title}</h2>
               <img src={ thumbnail } alt={ id } />
@@ -60,6 +59,8 @@ class Home extends Component {
                 Adicionar ao Carrinho
 
               </button>
+              {shipping.free_shipping
+                ? (<p data-testid="free-shipping">Frete Grátis</p>) : null}
             </div>
           ))}
       </div>

@@ -123,11 +123,16 @@ class App extends React.Component {
 
   handleSum = ({ target }) => {
     const { salvador, sum } = this.state;
+    const available = 'available_quantity';
     const theId = target.parentNode.firstChild.alt;
     const item = salvador.find((product) => product.id === theId);
     const index = salvador.indexOf(item);
     const newSum = sum;
-    newSum[index][theId].quantity += 1;
+    console.log(item[available]);
+    if (item[available] > newSum[index][theId].quantity) {
+      newSum[index][theId].quantity += 1;
+    }
+
     this.setState({ sum: newSum }, () => this.saveSumLocalStorage());
   };
 
